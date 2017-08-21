@@ -30,10 +30,10 @@ public class HelloWorld extends PApplet
 	private static final boolean offline = false;
 	
 	/** The map we use to display our home town: La Jolla, CA */
-	UnfoldingMap map1;
+	UnfoldingMap laJollaCA;
 	
 	/** The map you will use to display your home town */ 
-	UnfoldingMap map2;
+	UnfoldingMap blacksburgVA;
 
 	public void setup() {
 		size(800, 600, P2D);  // Set up the Applet window to be 800x600
@@ -65,25 +65,27 @@ public class HelloWorld extends PApplet
 		// The 6th argument specifies the map provider.  
 		// There are several providers built-in.
 		// Note if you are working offline you must use the MBTilesMapProvider
-		map1 = new UnfoldingMap(this, 50, 50, 350, 500, provider);
-
+		laJollaCA = new UnfoldingMap(this, 40, 50, 350, 500, provider);
+		blacksburgVA = new UnfoldingMap(this, 410, 50, 350, 500, provider);
+		
 		// The next line zooms in and centers the map at 
 	    // 32.9 (latitude) and -117.2 (longitude)
-	    map1.zoomAndPanTo(zoomLevel, new Location(32.9f, -117.2f));
+	    laJollaCA.zoomAndPanTo(zoomLevel, new Location(32.9f, -117.2f));
+	    blacksburgVA.zoomAndPanTo(zoomLevel, new Location(37.230021, -80.410574));
 		
 		// This line makes the map interactive
-		MapUtils.createDefaultEventDispatcher(this, map1);
+		MapUtils.createDefaultEventDispatcher(this, laJollaCA);
 		
 		// TODO: Add code here that creates map2 
-		// Then you'll modify draw() below
+		
 
 	}
 
 	/** Draw the Applet window.  */
 	public void draw() {
-		// So far we only draw map1...
-		// TODO: Add code so that both maps are displayed
-		map1.draw();
+		
+		laJollaCA.draw();
+		blacksburgVA.draw();
 	}
 
 	

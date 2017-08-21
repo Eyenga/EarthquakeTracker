@@ -78,14 +78,14 @@ public class EarthquakeCityMapDemo extends PApplet {
 	    //STAGE 2: Features with rich data, then Marker
 	    
 	    // First create Feature for details of Valdivia earthquake
-//	    Location valLoc = new Location(-38.14f,-73.03f);
-//	    PointFeature valEq = new PointFeature(valLoc);
-//	    valEq.addProperty("title", "Valdivia, Chile");
-//	    valEq.addProperty("magnitude", "9.5");
-//	    valEq.addProperty("date", "May 22, 1960");
-//	    
-//	    Marker valMk = new SimplePointMarker(valLoc, valEq.getProperties());
-//	    map.addMarker(valMk);
+	    Location valLoc = new Location(-38.14f,-73.03f);
+	    PointFeature valEq = new PointFeature(valLoc);
+	    valEq.addProperty("title", "Valdivia, Chile");
+	    valEq.addProperty("magnitude", "9.5");
+	    valEq.addProperty("date", "May 22, 1960");
+	    
+	    Marker valMk = new SimplePointMarker(valLoc, valEq.getProperties());
+	    map.addMarker(valMk);
 	    
 	   //STAGE 3: List of Features, then list of Markers (ADTs)
 	   // cf. http://earthquake.usgs.gov/earthquakes/world/10_largest_world.php
