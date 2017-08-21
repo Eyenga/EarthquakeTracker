@@ -2,6 +2,7 @@ package module3;
 
 //Java utilities libraries
 import java.util.ArrayList;
+import java.util.Iterator;
 //import java.util.Collections;
 //import java.util.Comparator;
 import java.util.List;
@@ -66,18 +67,22 @@ public class EarthquakeCityMap extends PApplet {
 	    map.zoomToLevel(2);
 	    MapUtils.createDefaultEventDispatcher(this, map);	
 			
-	    // The List you will populate with new SimplePointMarkers
-	    List<Marker> markers = new ArrayList<Marker>();
-
-	    //Use provided parser to collect properties for each earthquake
+	  //Use provided parser to collect properties for each earthquake
 	    //PointFeatures have a getLocation method
 	    List<PointFeature> earthquakes = ParseFeed.parseEarthquake(this, earthquakesURL);
+	    
+	    // The List you will populate with new SimplePointMarkers
+	    List<Marker> markers = new ArrayList<Marker>();
 	    
 	    //TODO (Step 3): Add a loop here that calls createMarker (see below) 
 	    // to create a new SimplePointMarker for each PointFeature in 
 	    // earthquakes.  Then add each new SimplePointMarker to the 
 	    // List markers (so that it will be added to the map in the line below)
-	    
+	    for (PointFeature eq : earthquakes)
+		{
+			Marker eqMarker = createMarker(eq);
+			markers.add(eqMarker);
+		}
 	    
 	    // Add the markers to the map so that they are displayed
 	    map.addMarkers(markers);
@@ -87,7 +92,7 @@ public class EarthquakeCityMap extends PApplet {
 	 * feature and returns a SimplePointMarker for that earthquake
 	 * 
 	 * In step 3 You can use this method as-is.  Call it from a loop in the 
-	 * setp method.  
+	 * setup method.  
 	 * 
 	 * TODO (Step 4): Add code to this method so that it adds the proper 
 	 * styling to each marker based on the magnitude of the earthquake.  
