@@ -99,6 +99,10 @@ public class EarthquakeCityMap extends PApplet {
 	*/
 	private SimplePointMarker createMarker(PointFeature feature)
 	{  
+		int blue = color(0,0,255); // Indicates earthquake of light magnitude  
+	    int yellow = color(255, 255, 0); // For earthquake of moderate magnitude
+	    int red = color(255, 0, 0); // For earthquake of large magnitude
+		
 		// To print all of the features in a PointFeature (so you can see what they are)
 		// uncomment the line below.  Note this will only print if you call createMarker 
 		// from setup
@@ -110,9 +114,7 @@ public class EarthquakeCityMap extends PApplet {
 		Object magObj = feature.getProperty("magnitude");
 		float mag = Float.parseFloat(magObj.toString());
 		
-		// Here is an example of how to use Processing's color method to generate 
-	    // an int that represents the color yellow.  
-	    int yellow = color(255, 255, 0);
+		
 		
 		// TODO (Step 4): Add code below to style the marker's size and color 
 	    // according to the magnitude of the earthquake.  
@@ -121,7 +123,16 @@ public class EarthquakeCityMap extends PApplet {
 	    // Rather than comparing the magnitude to a number directly, compare 
 	    // the magnitude to these variables (and change their value in the code 
 	    // above if you want to change what you mean by "moderate" and "light")
-	    
+	    if(mag <= THRESHOLD_LIGHT) {
+	    	
+	    	marker.setColor(blue);
+	    }else if (mag <= THRESHOLD_MODERATE) {
+	    	
+	    	marker.setColor(yellow);
+	    }else {
+	    	
+	    	marker.setColor(red);
+	    }
 	    
 	    // Finally return the marker
 	    return marker;
