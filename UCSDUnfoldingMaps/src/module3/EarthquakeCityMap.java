@@ -43,6 +43,14 @@ public class EarthquakeCityMap extends PApplet
 	// Less than this threshold is a minor earthquake
 	public static final float THRESHOLD_LIGHT = 4;
 
+	public static final int LIGHT_QUAKE_COLOR = new PApplet().color(0, 0, 255); // Indicates earthquake of light
+																				// magnitude
+	public static final int MODERATE_QUAKE_COLOR = new PApplet().color(255, 255, 0); // For earthquake of moderate
+																						// magnitude
+	public static final int EXTREMME_QUAKE_COLOR = new PApplet().color(255, 0, 0); // For earthquake of large magnitude
+	
+	public static final float MARKER_SIZE = 15;
+
 	/**
 	 * This is where to find the local tiles, for working without an Internet
 	 * connection
@@ -55,7 +63,8 @@ public class EarthquakeCityMap extends PApplet
 	// feed with magnitude 2.5+ Earthquakes
 	private String earthquakesURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom";
 
-	public void setup() {
+	public void setup()
+	{
 		size(950, 600, OPENGL);
 
 		if (offline)
@@ -79,10 +88,7 @@ public class EarthquakeCityMap extends PApplet
 		// The List you will populate with new SimplePointMarkers
 		List<Marker> markers = new ArrayList<Marker>();
 
-		// TODO (Step 3): Add a loop here that calls createMarker (see below)
-		// to create a new SimplePointMarker for each PointFeature in
-		// earthquakes. Then add each new SimplePointMarker to the
-		// List markers (so that it will be added to the map in the line below)
+		// Create SimplePointMarkers for each PointFeature. Populate list of markers
 		for (PointFeature eq : earthquakes)
 		{
 			Marker eqMarker = createMarker(eq);
@@ -93,86 +99,79 @@ public class EarthquakeCityMap extends PApplet
 		map.addMarkers(markers);
 	}
 
-	/*
-	 * createMarker: A suggested helper method that takes in an earthquake feature
-	 * and returns a SimplePointMarker for that earthquake
+	public void draw()
+	{
+		background(127.5f);
+		map.draw();
+		addKey();
+	}
+	
+	/**
+	 * Helper method that takes in an earthquake feature and returns a
+	 * SimplePointMarker for that earthquake
 	 * 
-	 * In step 3 You can use this method as-is. Call it from a loop in the setup
-	 * method.
-	 * 
-	 * TODO (Step 4): Add code to this method so that it adds the proper styling to
-	 * each marker based on the magnitude of the earthquake.
+	 * @param feature
+	 *            PointFeature used to create the SimplePointMarker
+	 * @return A SimplePointMarker
 	 */
-	private SimplePointMarker createMarker(PointFeature feature) {
-		int blue = color(0, 0, 255); // Indicates earthquake of light magnitude
-		int yellow = color(255, 255, 0); // For earthquake of moderate magnitude
-		int red = color(255, 0, 0); // For earthquake of large magnitude
-
-		// To print all of the features in a PointFeature (so you can see what they are)
-		// uncomment the line below. Note this will only print if you call createMarker
-		// from setup
+	private SimplePointMarker createMarker(PointFeature feature)
+	{
 		// System.out.println(feature.getProperties());
 
 		// Create a new SimplePointMarker at the location given by the PointFeature
-		SimplePointMarker marker = new SimplePointMarker(feature.getLocation());
+		SimplePointMarker marker = new SimplePointMarker(feature.getLocation(), feature.getProperties());
 
 		Object magObj = feature.getProperty("magnitude");
 		float mag = Float.parseFloat(magObj.toString());
 
-		// TODO (Step 4): Add code below to style the marker's size and color
-		// according to the magnitude of the earthquake.
-		// Don't forget about the constants THRESHOLD_MODERATE and
-		// THRESHOLD_LIGHT, which are declared above.
-		// Rather than comparing the magnitude to a number directly, compare
-		// the magnitude to these variables (and change their value in the code
-		// above if you want to change what you mean by "moderate" and "light")
+		// style the marker's size and color according to the earthquake's magnitude
 		if (mag <= THRESHOLD_LIGHT)
 		{
-
-			marker.setColor(blue);
+			marker.setColor(LIGHT_QUAKE_COLOR);
+			marker.setRadius(MARKER_SIZE);
 		} else if (mag <= THRESHOLD_MODERATE)
 		{
-
-			marker.setColor(yellow);
+			marker.setColor(MODERATE_QUAKE_COLOR);
+			marker.setRadius(MARKER_SIZE);
 		} else
 		{
-
-			marker.setColor(red);
+			marker.setColor(EXTREMME_QUAKE_COLOR);
+			marker.setRadius(MARKER_SIZE);
 		}
 
 		// Finally return the marker
 		return marker;
 	}
 
-	public void draw() {
-		background(127.5f);
-		map.draw();
-		addKey();
-	}
+	/**
+	 * 
+	 */
+	private void addKey()
+	{
+		float keyX = 10, keyY = 50, keyW = 180, keyH = 200, keyBG = 255;
+		float margin = 20;
+		char[] title = "Key".toCharArray();
 
-	// helper method to draw key in GUI
-	// TODO: Implement this method to draw the key
-	private void addKey() {
-		
-		fill(255);
+		fill(keyBG);
 		// Add a rectangle
-		rect(10, 50, 180, 80);
-		// Add the title of the key
+		rect(keyX, keyY, keyW, keyH);		
+		// Add relevant shapes and color
+		ellipseMode(CORNER);
+		fill(LIGHT_QUAKE_COLOR);
+		ellipse((keyX + margin), (keyY + 2*margin), MARKER_SIZE, MARKER_SIZE);
+		fill(MODERATE_QUAKE_COLOR);
+		ellipse((keyX + margin), (keyY + 3*margin), MARKER_SIZE, MARKER_SIZE);
+		fill(EXTREMME_QUAKE_COLOR);
+		ellipse((keyX + margin), (keyY + 4*margin), MARKER_SIZE, MARKER_SIZE);
+		// Add text
 		fill(0);
-		text("Key", 80, 60);
-		// Add shapes and colors used in map
-		fill(255, 0, 0);
-		ellipse(20, 70, 10, 10);
-		fill(255, 255, 0);
-		ellipse(20, 90, 10, 10);
-		fill(0, 0, 255);
-		ellipse(20, 110, 10, 10);
-		// Add text indicating meaning of each corresponding shape and color
-		fill(0);
-		text("5.0+ Magnitude", 30, 70);
-		text("4.0+ Magnitude", 30, 90);
-		text("Below 4.0 Magnitude", 20, 110);
-		noFill();
+		textAlign(CENTER);
+		text("Earthquake Tracker", (keyW / 2), keyY + margin);
+		textAlign(LEFT, TOP);
+		text("Below 4.0 Magnitude", (keyX + MARKER_SIZE + 2*margin), (keyY + 2*margin));
+		text("4.0+ Magnitude", (keyX + MARKER_SIZE + 2*margin), (keyY + 3*margin));
+		text("5.0+ Magnitude", (keyX + MARKER_SIZE + 2*margin), (keyY + 4*margin));
+		//noFill();
 
 	}
 }

@@ -3,7 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="data"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib/core.jar"/>
+	<classpathentry kind="lib" path="lib/core.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="https://processing.github.io/processing-javadocs/core/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="lib/jogl-all.jar">
 		<attributes>
@@ -14,6 +18,10 @@
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/json4processing.jar"/>
 	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
-	<classpathentry kind="lib" path="lib/unfolding.0.9.7-uscd.jar"/>
+	<classpathentry kind="lib" path="lib/unfolding.0.9.7-uscd.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://unfoldingmaps.org/javadoc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build"/>
 </classpath>
