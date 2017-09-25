@@ -15,6 +15,7 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
 import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
+import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
 import processing.core.PApplet;
@@ -24,7 +25,7 @@ import processing.core.PApplet;
  * earthquake data.
  * @formatter:off 
  * @author UC San Diego Intermediate Software Development MOOC team
- * 			*Date: July 17, 2015
+ * 			Date: July 17, 2015
  * @author Frank Eyenga 
  * 			Edited: September 25, 2017 
  * @formatter:on
@@ -80,7 +81,10 @@ public class EarthquakeCityMap extends PApplet
 			earthquakesURL = "2.5_week.atom"; // The same feed, but saved August 7, 2015
 		} else
 		{
-			map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			// map = new UnfoldingMap(this, 200, 50, 650, 600, new
+			// Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 650, 600, new OpenStreetMap.OpenStreetMapProvider());
+
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 			// earthquakesURL = "2.5_week.atom";
 		}
@@ -149,7 +153,8 @@ public class EarthquakeCityMap extends PApplet
 	// TODO: Update this method as appropriate
 	private void addKey()
 	{
-		// Remember you can use Processing's graphics methods here
+		pushStyle();
+		
 		fill(255, 250, 240);
 		rect(25, 50, 150, 250);
 
@@ -158,17 +163,19 @@ public class EarthquakeCityMap extends PApplet
 		textSize(12);
 		text("Earthquake Key", 50, 75);
 
-		fill(color(255, 0, 0));
-		ellipse(50, 125, 15, 15);
-		fill(color(255, 255, 0));
-		ellipse(50, 175, 10, 10);
-		fill(color(0, 0, 255));
-		ellipse(50, 225, 5, 5);
+		fill(CityMarker.COLOR);
+		triangle(50, 100, 43, 115, 57, 115);
+		fill(255);
+		ellipse(50, 130, 15, 15);
+		rectMode(CENTER);
+		rect(50, 152, 15, 15);
 
 		fill(0, 0, 0);
-		text("5.0+ Magnitude", 75, 125);
-		text("4.0+ Magnitude", 75, 175);
-		text("Below 4.0", 75, 225);
+		text("City Marker", 75, 105);
+		text("Land Quake", 75, 130);
+		text("Ocean Quake", 75, 152);
+		
+		popStyle();
 	}
 
 	/**
