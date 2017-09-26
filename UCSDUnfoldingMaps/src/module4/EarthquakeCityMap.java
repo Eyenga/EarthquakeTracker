@@ -97,7 +97,7 @@ public class EarthquakeCityMap extends PApplet
 		// earthquakesURL = "test2.atom";
 
 		// WHEN TAKING THIS QUIZ: Uncomment the next line
-		 earthquakesURL = "quiz1.atom";
+		// earthquakesURL = "quiz1.atom";
 
 		// (2) Reading in earthquake data and geometric properties
 		// STEP 1: load country features and markers

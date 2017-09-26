@@ -24,7 +24,7 @@ public class CityMarker extends SimplePointMarker
 	// It's a good idea to use this variable in your draw method
 	public static final int TRI_SIZE = 15;
 
-	public static final int COLOR = 0xFF800000;
+	public static final int COLOR = 0xFF800000; //Maroon
 
 	public CityMarker(Location location)
 	{
