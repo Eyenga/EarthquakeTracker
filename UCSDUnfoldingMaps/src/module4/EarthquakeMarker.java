@@ -38,7 +38,9 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	/** Greater than or equal to this threshold is a deep depth */
 	public static final float THRESHOLD_DEEP = 300;
 
-	// ADD constants for colors
+	public static final int SHALLOW_COLOR = 0xFF0000FF; // Blue
+	public static final int INTERMEDIATE_COLOR = 0xFFFFFF00; // Yellow
+	public static final int DEEP_COLOR = 0xFFFF0000; // Red
 
 	/**
 	 * Draws a visual representation of the earthquake.
@@ -84,14 +86,26 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 
 	}
 
-	// determine color of marker from depth, and set pg's fill color
-	// using the pg.fill method.
-	// We suggest: Deep = red, intermediate = blue, shallow = yellow
-	// But this is up to you, of course.
-	// You might find the getters below helpful.
+	/**
+	 * Determines and sets color of marker based on earthquakes's depth
+	 * 
+	 * @param pg
+	 *            The PGraphic to set color on.
+	 */
 	private void colorDetermine(PGraphics pg)
 	{
-		// TODO: Implement this method
+		float depth = this.getDepth();
+		
+		if (depth < THRESHOLD_INTERMEDIATE)
+		{
+			pg.fill(SHALLOW_COLOR);
+		} else if(depth < THRESHOLD_DEEP)
+		{
+			pg.fill(INTERMEDIATE_COLOR);
+		} else
+		{
+			pg.fill(DEEP_COLOR);
+		}
 	}
 
 	/*

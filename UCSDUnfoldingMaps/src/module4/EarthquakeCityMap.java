@@ -97,7 +97,7 @@ public class EarthquakeCityMap extends PApplet
 		// earthquakesURL = "test2.atom";
 
 		// WHEN TAKING THIS QUIZ: Uncomment the next line
-		// earthquakesURL = "quiz1.atom";
+		 earthquakesURL = "quiz1.atom";
 
 		// (2) Reading in earthquake data and geometric properties
 		// STEP 1: load country features and markers
@@ -154,9 +154,9 @@ public class EarthquakeCityMap extends PApplet
 	private void addKey()
 	{
 		pushStyle();
-		
+
 		fill(255, 250, 240);
-		rect(25, 50, 150, 250);
+		rect(15, 50, 160, 250);
 
 		fill(0);
 		textAlign(LEFT, CENTER);
@@ -174,7 +174,19 @@ public class EarthquakeCityMap extends PApplet
 		text("City Marker", 75, 105);
 		text("Land Quake", 75, 130);
 		text("Ocean Quake", 75, 152);
+		text("Marker size ~ Magnitude", 20, 172);
+		text("Shallow", 75, 190);
+		text("Intermediate", 75, 205); 
+		text("Deep", 75, 220); 
+
 		
+		fill(EarthquakeMarker.SHALLOW_COLOR);
+		ellipse(50, 190, 10, 10);
+		fill(EarthquakeMarker.INTERMEDIATE_COLOR);
+		ellipse(50, 205, 10, 10);
+		fill(EarthquakeMarker.DEEP_COLOR);
+		ellipse(50, 220, 10, 10);
+	
 		popStyle();
 	}
 
