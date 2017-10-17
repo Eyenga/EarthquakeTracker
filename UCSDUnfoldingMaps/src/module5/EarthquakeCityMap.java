@@ -16,6 +16,7 @@ import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
+import de.fhpotsdam.unfolding.utils.ScreenPosition;
 import parsing.ParseFeed;
 import processing.core.PApplet;
 
@@ -81,7 +82,8 @@ public class EarthquakeCityMap extends PApplet
 			earthquakesURL = "2.5_week.atom"; // The same feed, but saved August 7, 2015
 		} else
 		{
-			//map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			// map = new UnfoldingMap(this, 200, 50, 650, 600, new
+			// Google.GoogleMapProvider());
 			map = new UnfoldingMap(this, 200, 50, 650, 600, new OpenStreetMap.OpenStreetMapProvider());
 
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
@@ -184,9 +186,85 @@ public class EarthquakeCityMap extends PApplet
 	@Override
 	public void mouseClicked()
 	{
-		// TODO: Implement this method
-		// Hint: You probably want a helper method or two to keep this code
-		// from getting too long/disorganized
+		if (lastClicked != null)
+		{
+
+			lastClicked.setClicked(false);
+			lastClicked = null;
+			unhideMarkers();
+		} else
+		{
+
+			for (Marker quake : quakeMarkers)
+			{
+				if (quake.isInside(map, mouseX, mouseY))
+				{
+					lastClicked = (CommonMarker) quake;
+					lastClicked.setClicked(true);
+					break;
+				}
+			}
+
+			if (lastClicked == null)
+			{
+				for (Marker city : cityMarkers)
+				{
+					if (city.isInside(map, mouseX, mouseY))
+					{
+						lastClicked = (CommonMarker) city;
+						lastClicked.setClicked(true);
+						break;
+					}
+				}
+			}
+
+			if (lastClicked != null)
+			{
+
+				if (lastClicked.getClass() == CityMarker.class)
+				{
+
+					for (Marker quake : quakeMarkers)
+					{
+						if (quake.getDistanceTo(lastClicked.getLocation()) > ((EarthquakeMarker) quake).threatCircle())
+						{
+							quake.setHidden(true);
+						}
+					}
+
+					for (Marker city : cityMarkers)
+					{
+						if (!((CommonMarker) city).getClicked())
+						{
+							city.setHidden(true);
+						}
+					}
+
+				} else
+				{
+
+					for (Marker quake : quakeMarkers)
+					{
+						if (!((CommonMarker) quake).getClicked())
+						{
+
+							quake.setHidden(true);
+						}
+
+					}
+
+					for (Marker city : cityMarkers)
+					{
+						if (city.getDistanceTo(lastClicked.getLocation()) > ((EarthquakeMarker) lastClicked).threatCircle())
+						{
+							city.setHidden(true);
+						}
+					}
+				}
+
+			}
+		}
+
 	}
 
 	// loop over and unhide all markers

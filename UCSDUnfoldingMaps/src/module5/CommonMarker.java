@@ -39,16 +39,12 @@ public abstract class CommonMarker extends SimplePointMarker {
 	
 	
 	public void draw(PGraphics pg, float x, float y) {
-		
+		// For starter code just drawMaker(...)
 		if (!hidden) {
-			pg.pushStyle();
-			
 			drawMarker(pg, x, y);
 			if (selected) {
-				showTitle(pg, x, y);  
+				showTitle(pg, x, y);  // You will implement this in the subclasses
 			}
-			
-			pg.popStyle();
 		}
 	}
 	

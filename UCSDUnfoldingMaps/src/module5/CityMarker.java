@@ -24,6 +24,7 @@ public class CityMarker extends CommonMarker
 {
 
 	public static int TRI_SIZE = 5; // The size of the triangle marker
+	public static final int SELECT_COLOR = 0xFFFFFFFF;
 
 	public CityMarker(Location location)
 	{
@@ -37,10 +38,7 @@ public class CityMarker extends CommonMarker
 		// and "population" (population, in millions)
 	}
 
-	/**
-	 * Implementation of method to draw marker on the map.
-	 */
-	public void draw(PGraphics pg, float x, float y)
+	public void drawMarker(PGraphics pg, float x, float y)
 	{
 		// Save previous drawing style
 		pg.pushStyle();
@@ -56,14 +54,25 @@ public class CityMarker extends CommonMarker
 	/** Show the title of the city if this marker is selected */
 	public void showTitle(PGraphics pg, float x, float y)
 	{
+		// Variables to help improve aesthetics and readability of GUI and code
+		// respectively
+		float textMargin = 2.5f; // Margin between text and enclosing box
+		float posMargin = this.radius + 5; // Margin between location of marker and location of title
+		String title = String.format("%1$s %2$s %3$s", getCity(), getCountry(), getPopulation());
 
-		// TODO: Implement this method
-	}
+		pg.pushStyle();
 
-	public void drawMarker(PGraphics pg, float x, float y)
-	{
+		pg.fill(SELECT_COLOR);
+		pg.rect(x, y + posMargin, pg.textWidth(title) + (textMargin * 2), pg.textAscent() + pg.textDescent());
+
+		pg.fill(0);
+		pg.textAlign(pg.LEFT, pg.TOP);
+		pg.text(title, x + textMargin, y + posMargin);
 		
+		pg.popStyle();
+
 	}
+
 
 	/*
 	 * Local getters for some city properties.

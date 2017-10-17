@@ -27,7 +27,6 @@ public abstract class EarthquakeMarker extends CommonMarker
 
 	// constants for distance
 	protected static final float kmPerMile = 1.6f;
-	public static final int SELLECT_COLOR = 0xFFFFFFFF;
 
 	/** Greater than or equal to this threshold is a moderate earthquake */
 	public static final float THRESHOLD_MODERATE = 5;
@@ -40,6 +39,7 @@ public abstract class EarthquakeMarker extends CommonMarker
 	public static final float THRESHOLD_DEEP = 300;
 
 	// ADD constants for colors if you want
+	public static final int SELECT_COLOR = 0xFFFFFFFF;
 
 	// abstract method implemented in derived classes
 	public abstract void drawEarthquake(PGraphics pg, float x, float y);
@@ -91,22 +91,22 @@ public abstract class EarthquakeMarker extends CommonMarker
 	@Override
 	public void showTitle(PGraphics pg, float x, float y)
 	{
-		if (selected)
-		{
-			// Variables to help improve aesthetics and readability of GUI and code
-			// respectively
-			float textMargin = 2.5f; // Margin between text and enclosing box
-			float posMargin = this.radius + 5; // Margin between location of marker and location of title
-			String title = this.getStringProperty("title");
+		// Variables to help improve aesthetics and readability of GUI and code
+		// respectively
+		float textMargin = 2.5f; // Margin between text and enclosing box
+		float posMargin = this.radius + 5; // Margin between location of marker and location of title
+		String title = getTitle();
 
-			pg.fill(SELLECT_COLOR);
-			pg.rect(x, y + posMargin, pg.textWidth(title) + (textMargin * 2), pg.textAscent() + pg.textDescent());
+		pg.pushStyle();
 
-			pg.fill(0);
-			pg.textAlign(pg.LEFT, pg.TOP);
-			pg.text(title, x + textMargin, y + posMargin);
-		}
+		pg.fill(SELECT_COLOR);
+		pg.rect(x, y + posMargin, pg.textWidth(title) + (textMargin * 2), pg.textAscent() + pg.textDescent());
 
+		pg.fill(0);
+		pg.textAlign(pg.LEFT, pg.TOP);
+		pg.text(title, x + textMargin, y + posMargin);
+
+		pg.popStyle();
 	}
 
 	/**
