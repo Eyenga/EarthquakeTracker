@@ -8,6 +8,7 @@ import de.fhpotsdam.unfolding.data.Feature;
 import de.fhpotsdam.unfolding.data.GeoJSONReader;
 import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.geo.Location;
+import de.fhpotsdam.unfolding.marker.AbstractMarker;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
@@ -158,20 +159,26 @@ public class EarthquakeCityMap extends PApplet
 		selectMarkerIfHover(cityMarkers);
 	}
 
-	// If there is a marker under the cursor, and lastSelected is null
-	// set the lastSelected to be the first marker found under the cursor
-	// Make sure you do not select two markers.
-	//
+	/**
+	 * If no marker is currently selected, set the {@code selected} flag of the
+	 * first marker found under the mouse. A reference to that marker is then stored
+	 * in {@code lastSelected}.
+	 * 
+	 * @param markers
+	 *            - List of markers to check
+	 * @see AbstractMarker#setSelected(boolean)
+	 * @see #lastSelected
+	 */
 	private void selectMarkerIfHover(List<Marker> markers)
 	{
 		if (lastSelected == null)
 		{
-			for (Marker quake : markers)
+			for (Marker marker : markers)
 			{
-				if (quake.isInside(map, mouseX, mouseY))
+				if (marker.isInside(map, mouseX, mouseY))
 				{
-					quake.setSelected(true);
-					lastSelected = (CommonMarker) quake;
+					lastSelected = (CommonMarker) marker;
+					lastSelected.setSelected(true);
 					return;
 				}
 			}
@@ -188,86 +195,99 @@ public class EarthquakeCityMap extends PApplet
 	{
 		if (lastClicked != null)
 		{
-
 			lastClicked.setClicked(false);
 			lastClicked = null;
 			unhideMarkers();
+		} else if (lastSelected != null)
+		{
+			lastClicked = lastSelected;
 		} else
 		{
-
-			for (Marker quake : quakeMarkers)
-			{
-				if (quake.isInside(map, mouseX, mouseY))
-				{
-					lastClicked = (CommonMarker) quake;
-					lastClicked.setClicked(true);
-					break;
-				}
-			}
-
-			if (lastClicked == null)
-			{
-				for (Marker city : cityMarkers)
-				{
-					if (city.isInside(map, mouseX, mouseY))
-					{
-						lastClicked = (CommonMarker) city;
-						lastClicked.setClicked(true);
-						break;
-					}
-				}
-			}
-
-			if (lastClicked != null)
-			{
-
-				if (lastClicked.getClass() == CityMarker.class)
-				{
-
-					for (Marker quake : quakeMarkers)
-					{
-						if (quake.getDistanceTo(lastClicked.getLocation()) > ((EarthquakeMarker) quake).threatCircle())
-						{
-							quake.setHidden(true);
-						}
-					}
-
-					for (Marker city : cityMarkers)
-					{
-						if (!((CommonMarker) city).getClicked())
-						{
-							city.setHidden(true);
-						}
-					}
-
-				} else
-				{
-
-					for (Marker quake : quakeMarkers)
-					{
-						if (!((CommonMarker) quake).getClicked())
-						{
-
-							quake.setHidden(true);
-						}
-
-					}
-
-					for (Marker city : cityMarkers)
-					{
-						if (city.getDistanceTo(lastClicked.getLocation()) > ((EarthquakeMarker) lastClicked).threatCircle())
-						{
-							city.setHidden(true);
-						}
-					}
-				}
-
-			}
+			setClickedMarker(quakeMarkers);
+			setClickedMarker(cityMarkers);
 		}
+
+		hideMarkers(lastClicked);
 
 	}
 
-	// loop over and unhide all markers
+	/**
+	 * If no marker is currently clicked, set the {@code clicked} flag of the first
+	 * marker found under the mouse. A reference to that marker is then stored in
+	 * {@code lastClicked}.
+	 * 
+	 * @param markers
+	 *            - List of markers to check
+	 * @return true if a marker was found, false otherwise.
+	 * @see CommonMarker#setClicked(boolean)
+	 * @see #lastClicked
+	 */
+	private void setClickedMarker(List<Marker> markers)
+	{
+		if (lastClicked == null)
+		{
+			for (Marker marker : markers)
+			{
+				if (marker.isInside(map, mouseX, mouseY))
+				{
+					lastClicked = (CommonMarker) marker;
+					lastClicked.setClicked(true);
+					return;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Takes in a marker and updates the state of all other markers on the map so
+	 * that:
+	 * <p>
+	 * <li>If {@code marker} is null all markers are left unaffected</li>
+	 * <li>If {@code marker} represents a city, all earthquake markers which contain
+	 * that city in their threat circle are unaffected</li>
+	 * <li>If {@code marker} represents an earthquake, all cities within it's threat
+	 * circle are unaffected</li> <br>
+	 * All other cities and earthquakes will have their {@code hidden} flag set.
+	 * </p>
+	 * 
+	 * @param marker
+	 *            - A marker on the map that represents either a city or an
+	 *            earthquake.
+	 * @see AbstractMarker#setHidden(boolean)
+	 * @see EarthquakeMarker#threatCircle()
+	 */
+	private void hideMarkers(Marker marker)
+	{
+		if (marker != null)
+		{
+			if (marker.getClass() == CityMarker.class)
+			{
+
+				for (Marker quake : quakeMarkers)
+					if (quake.getDistanceTo(marker.getLocation()) > ((EarthquakeMarker) quake).threatCircle())
+						quake.setHidden(true);
+
+				for (Marker city : cityMarkers)
+					city.setHidden(true);
+
+			} else
+			{
+				for (Marker quake : quakeMarkers)
+					quake.setHidden(true);
+
+				for (Marker city : cityMarkers)
+					if (city.getDistanceTo(marker.getLocation()) > ((EarthquakeMarker) marker).threatCircle())
+						city.setHidden(true);
+			}
+
+			marker.setHidden(false);
+		}
+	}
+
+
+	/**
+	 * Loop over and unhide all markers
+	 */
 	private void unhideMarkers()
 	{
 		for (Marker marker : quakeMarkers)
